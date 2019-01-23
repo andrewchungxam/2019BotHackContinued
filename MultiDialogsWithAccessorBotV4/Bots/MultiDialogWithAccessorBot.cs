@@ -99,10 +99,17 @@ namespace Bot_Builder_Simplified_Echo_Bot_V4
                     {
                         if (dialogContext.ActiveDialog.Id == "thirdWaterName")
                         {
-                            var response = await _services.QnAServices[QnAMakerKey].GetAnswersAsync(turnContext);
-                            if (response != null && response.Length > 0)
+                            if (turnContext.Activity.Type == ActivityTypes.Message && turnContext.Activity.Text == "Back")
                             {
-                                await turnContext.SendActivityAsync(response[0].Answer, cancellationToken: cancellationToken);
+                                await dialogContext.CancelAllDialogsAsync();
+                            }
+                            else
+                            { 
+                                var response = await _services.QnAServices[QnAMakerKey].GetAnswersAsync(turnContext);
+                                if (response != null && response.Length > 0)
+                                {
+                                    await turnContext.SendActivityAsync(response[0].Answer, cancellationToken: cancellationToken);
+                                }
                             }
                         }
                     }
